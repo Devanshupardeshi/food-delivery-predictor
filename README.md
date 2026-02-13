@@ -2,6 +2,8 @@
 
 A machine learning-powered web application that predicts food delivery times based on delivery partner details, order characteristics, and location data. Built with **Streamlit** and **LightGBM**.
 
+🔗 **Live Demo**: [https://inttrvu-hackathon.onrender.com](https://inttrvu-hackathon.onrender.com)
+
 ---
 
 ## 🌟 App Features
