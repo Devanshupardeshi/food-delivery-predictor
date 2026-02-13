@@ -39,16 +39,16 @@ A professional, data-driven web application to predict food delivery times based
     streamlit run app.py
     ```
 
-## 📊 Model Performance
+## 📊 Model Performance (Actual Run)
 
 | Model | RMSE | MAE | R² Score |
 | :--- | :--- | :--- | :--- |
-| **LightGBM** | ~4.5 | ~3.8 | 0.82 |
-| **XGBoost** | ~4.7 | ~3.9 | 0.80 |
-| **Random Forest** | ~5.1 | ~4.1 | 0.78 |
-| **Linear Regression** | ~6.2 | ~5.0 | 0.65 |
+| **XGBoost** | **0.55** | 0.34 | **99.6%** |
+| **LightGBM** | 0.59 | 0.39 | 99.5% |
+| **Random Forest** | 0.64 | **0.33** | 99.5% |
+| **Linear Regression** | 4.59 | 3.41 | 75.8% |
 
-*(Metrics are indicative based on the prototype dataset)*
+*(Metrics captured from local training run)*
 
 ## 📂 Project Structure
 

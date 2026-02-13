@@ -6,7 +6,11 @@
 }
 
 /* Glassmorphism Cards */
-.css-1r6slb0, .css-12oz5g7, .stMetric, .stDataFrame, .stChart {
+.css-1r6slb0,
+.css-12oz5g7,
+.stMetric,
+.stDataFrame,
+.stChart {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -24,21 +28,24 @@ section[data-testid="stSidebar"] {
 }
 
 /* Typography */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     color: #ffffff;
     font-weight: 700;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 h1 {
     font-size: 2.5rem;
     background: -webkit-linear-gradient(45deg, #00d2ff, #3a7bd5);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 /* Custom Buttons */
-div.stButton > button {
+div.stButton>button {
     background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
     color: white;
     border: none;
@@ -49,21 +56,24 @@ div.stButton > button {
     box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
 }
 
-div.stButton > button:hover {
+div.stButton>button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
     background: linear-gradient(90deg, #00c6f0 0%, #336ec2 100%);
 }
 
 /* Inputs */
-.stTextInput > div > div > input, .stNumberInput > div > div > input, .stSelectbox > div > div {
+.stTextInput>div>div>input,
+.stNumberInput>div>div>input,
+.stSelectbox>div>div {
     background-color: rgba(255, 255, 255, 0.05);
     color: white;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.stTextInput > div > div > input:focus, .stNumberInput > div > div > input:focus {
+.stTextInput>div>div>input:focus,
+.stNumberInput>div>div>input:focus {
     border-color: #00d2ff;
     box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.2);
 }
@@ -72,6 +82,7 @@ div.stButton > button:hover {
 div[data-testid="stDataFrame"] {
     border: none;
 }
+
 div[data-testid="stDataFrame"] table {
     color: #e0e0e0;
 }
@@ -80,6 +91,7 @@ div[data-testid="stDataFrame"] table {
 label[data-testid="stMetricLabel"] {
     color: #a0a0b0;
 }
+
 div[data-testid="stMetricValue"] {
     color: #00d2ff;
 }
@@ -89,10 +101,12 @@ div[data-testid="stMetricValue"] {
     width: 10px;
     background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 5px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.3);
 }
