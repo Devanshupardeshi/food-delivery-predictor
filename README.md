@@ -1,69 +1,123 @@
-# 🍔 Food Delivery Time Predictor
+# 🛵 Food Delivery Time Predictor
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://devanshupardeshi-food-delivery-predictor-app-1ztjqo.streamlit.app/)
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+A machine learning-powered web application that predicts food delivery times based on delivery partner details, order characteristics, and location data. Built with **Streamlit** and **LightGBM**.
 
-A professional, data-driven web application to predict food delivery times based on various operational factors. Built for the Hackathon 2026.
+---
 
-## 🚀 Features
+## 🌟 App Features
 
-*   **Operational Dashboard**: Real-time overview of key metrics (Total deliveries, active partners, city-wise breakdown).
-*   **Interactive EDA**: Deep dive into data with interactive charts showing correlations, driver performance, and vehicle impact.
-*   **Advanced Logic**: Implements custom feature engineering (Haversine distance, partner efficiency scores, order complexity).
-*   **Multi-Model Training**: Train and compare **Linear Regression, Random Forest, XGBoost, and LightGBM** directly from the UI.
-*   **Live Prediction**: "What-If" analysis tool to predict delivery times for new orders, featuring traffic simulation.
+### 🎯 Accurate Predictions
 
-## 🛠️ Tech Stack
+- **Real-time Inference**: Instantly calculates estimated delivery time upon user input.
+- **Interactive Sidebar**: Adjust Delivery Partner Age, Ratings, Vehicle Type, and Geo-coordinates easily.
 
-*   **Frontend**: [Streamlit](https://streamlit.io/) (with custom CSS for Glassmorphism UI)
-*   **Data Processing**: Pandas, NumPy
-*   **Visualization**: Plotly, Seaborn, Matplotlib
-*   **Machine Learning**: Scikit-Learn, XGBoost, LightGBM
+### 📊 Advanced Data Visualization
 
-## 📦 Installation
+The app includes a **Comparative Analysis** section to contextualize the prediction:
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/your-username/food-delivery-predictor.git
-    cd food-delivery-predictor
-    ```
+- **Time Distribution Analysis**: A histogram comparing your predicted time against the historical distribution of all delivery times.
+- **Vehicle Impact Chart**: A boxplot showing how different vehicle types (Motorcycle, Scooter, Bicycle) affect delivery speed.
+- **Feature Breakdown**: Detailed dataframe view of the engineered features sent to the model (Distance, Interaction Scores, etc.).
 
-2.  **Install dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
+---
 
-3.  **Run the app**:
-    ```bash
-    streamlit run app.py
-    ```
+## 🔬 Methodology for Best Solution
 
-## 📊 Model Performance (Actual Run)
+To achieve the highest prediction accuracy (Root Mean Squared Error of ~7.23), we implemented a rigorous data processing and feature engineering pipeline derived from extensive analysis in `prototype.ipynb`.
 
-| Model | RMSE | MAE | R² Score |
-| :--- | :--- | :--- | :--- |
-| **XGBoost** | **0.55** | 0.34 | **99.6%** |
-| **LightGBM** | 0.59 | 0.39 | 99.5% |
-| **Random Forest** | 0.64 | **0.33** | 99.5% |
-| **Linear Regression** | 4.59 | 3.41 | 75.8% |
+### 1. Data Preprocessing
 
-*(Metrics captured from local training run)*
+Before feeding data into the model, raw inputs undergo several cleaning steps:
+
+- **Missing Value Imputation**: Handling potential missing data points with median/mode strategies (implicit in the pipeline logic).
+- **Categorical Handling**:
+  - **One-Hot Encoding**: Used for `type_of_order` and `type_of_vehicle` to allow the model to understand categorical distinctions without imposing arbitrary ordinality.
+  - **Binning**: `delivery_person_age` is discretized into buckets ('young', 'mid', 'senior') to capture non-linear age-related trends.
+
+### 2. Advanced Feature Engineering
+
+We didn't just use raw columns; we created new, high-signal features:
+
+- **Geospatial Distance Calculation**:
+  - **Haversine Distance**: Calculates the precise "as-the-crow-flies" distance between restaurant and delivery coordinates on the Earth's surface.
+  - **Manhattan Distance**: A secondary metric (`abs(lat_diff) + abs(lon_diff)`) that often better approximates city grid travel.
+- **Distance Transformations**:
+  - `distance_log`: Applying `np.log1p` to distances to normalize skewed distributions and reduce the impact of outliers.
+  - `distance_sq`: Squaring distance to capture exponential relationships (e.g., traffic delays compounding on longer routes).
+- **Interaction Features**:
+  - **Partner Efficiency**: Combines `ratings` and `multiple_deliveries` to model how driver experience and workload interact.
+  - **Distance-Vehicle Interaction**: Multiplies distance by a mapped `vehicle_score` (Motorcycle=3, Bicycle=1) to account for speed differences over varied distances.
+  - **Distance-Rating Interaction**: Models how highly-rated drivers might manage longer routes more efficiently.
+
+### 3. Model Architecture
+
+- **Algorithm**: **LightGBM Regressor** (Gradient Boosting Machine).
+- **Why LightGBM?**: Chosen for its superior speed and efficiency with large datasets, and its ability to handle complex non-linear feature interactions better than traditional linear models.
+- **Pipeline Integration**: The entire preprocessing and prediction flow is encapsulated in a Scikit-Learn `Pipeline`, ensuring that the exact same transformations applied during training are applied during real-time inference in the app.
+
+### 4. Model Evaluation Metrics
+
+The selected LightGBM model outperformed other candidates (Linear Regression, Random Forest, XGBoost) during cross-validation:
+
+| Metric         | Score           | Description                                                                                                                       |
+| :------------- | :-------------- | :-------------------------------------------------------------------------------------------------------------------------------- |
+| **RMSE** | **~7.23** | Root Mean Squared Error (Lower is better). Indicates the model's predictions are typically within ±7 minutes of the actual time. |
+| **R²**  | **~0.82** | R-Squared (Higher is better). Explains approx. 82% of the variance in delivery times.                                             |
+
+---
+
+## 🚀 Setup & Installation
+
+### Prerequisites
+
+- Python 3.8+
+- pip
+
+### 1. Clone & Install
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 2. Verify Logic (Optional)
+
+Run the headless verification script to test the model pipeline without launching the UI:
+
+```bash
+python verify_app.py
+```
+
+### 3. Run Locally
+
+```bash
+streamlit run app.py
+```
+
+The app will open automatically in your browser at `http://localhost:8501`.
+
+### 3. Deploy to Render
+
+1. Create a new**Web Service** on [Render](https://render.com/).
+2. Connect this repository.
+3. Use the following settings:
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `streamlit run app.py`
+
+---
 
 ## 📂 Project Structure
 
-```
-├── app.py                # Main Streamlit application
-├── style.css             # Custom styling (Glassmorphism theme)
-├── dataset.csv           # Training dataset
-├── requirements.txt      # Python dependencies
-└── README.md             # Project documentation
-```
+- `app.py`: Main application code containing UI, Feature Engineering logic, and Visualization code.
+- `requirements.txt`: Python package dependencies.
+- `best_delivery_time_model.pkl`: Pre-trained model pipeline (required).
+- `cleaned_dataset_fooddelivery.csv`: Dataset used for generating comparative visualizations.
 
-## 🤝 Contribution
+---
 
-Feel free to fork this repository and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
+## 🛠️ Technology Stack
 
-## 📄 License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+- **Frontend**: Streamlit
+- **ML Engine**: Scikit-Learn, LightGBM
+- **Data Processing**: Pandas, NumPy
+- **Visualization**: Matplotlib, Seaborn
